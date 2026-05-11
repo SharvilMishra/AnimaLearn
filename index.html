@@ -19,6 +19,8 @@
 </head>
 <body>
 <div class="toast-container" id="toastContainer"></div>
+
+<!-- Authentication Modal -->
 <div class="modal-overlay" id="authModal">
   <div class="modal-content">
     <div id="authLogin">
@@ -49,23 +51,110 @@
     <button class="btn-ghost absolute top-4 right-4" onclick="closeAuth()" aria-label="Close"><i class="fas fa-times text-lg"></i></button>
   </div>
 </div>
+
+<!-- Mobile Overlay -->
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
+
 <div class="flex h-screen">
+  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-    <div class="p-5 border-b" style="border-color:var(--border)"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--accent)"><i class="fas fa-atom text-white text-lg"></i></div><div><h1 class="font-display font-bold text-lg leading-tight" style="color:var(--text)">AnimaLearn</h1><p class="text-xs" style="color:var(--text2)">Visual Learning</p></div></div></div>
+    <div class="p-5 border-b" style="border-color:var(--border)">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--accent)"><i class="fas fa-atom text-white text-lg"></i></div>
+        <div>
+          <h1 class="font-display font-bold text-lg leading-tight" style="color:var(--text)">AnimaLearn</h1>
+          <p class="text-xs" style="color:var(--text2)">Visual Learning</p>
+        </div>
+      </div>
+    </div>
+    
     <nav class="flex-1 py-3 overflow-y-auto">
+      <!-- Main Navigation -->
       <div class="px-5 py-2"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">MAIN</span></div>
       <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')"><i class="fas fa-th-large w-5 text-center"></i>Dashboard</div>
-      <div class="nav-item" data-page="topics" onclick="navigate('topics')"><i class="fas fa-shapes w-5 text-center"></i>Topics</div>
+      <div class="nav-item" data-page="topics" onclick="navigate('topics')"><i class="fas fa-shapes w-5 text-center"></i>All Topics</div>
       <div class="nav-item" data-page="notes" onclick="navigate('notes')"><i class="fas fa-sticky-note w-5 text-center"></i>Notes</div>
       <div class="nav-item" data-page="references" onclick="navigate('references')"><i class="fas fa-book-open w-5 text-center"></i>References</div>
+      
+      <!-- Systematic Subjects Structure -->
       <div class="px-5 py-2 mt-4"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">SUBJECTS</span></div>
-      <div class="nav-item" onclick="navigate('topics','calculus')"><span class="difficulty-dot" style="background:#ef4444"></span>Calculus</div>
-      <div class="nav-item" onclick="navigate('topics','linear-algebra')"><span class="difficulty-dot" style="background:#3b82f6"></span>Linear Algebra</div>
-      <div class="nav-item" onclick="navigate('topics','physics')"><span class="difficulty-dot" style="background:#10b981"></span>Physics</div>
-      <div class="nav-item" onclick="navigate('topics','differential-equations')"><span class="difficulty-dot" style="background:#f59e0b"></span>Differential Equations</div>
-      <div class="nav-item" onclick="navigate('topics','sequences-series')"><span class="difficulty-dot" style="background:#a855f7"></span>Sequences & Series</div>
+      
+      <!-- Mathematics -->
+      <div class="nav-group">
+        <div class="nav-group-header" onclick="toggleNavGroup('math')">
+          <span class="mr-2">📘</span>
+          <span class="flex-1 font-semibold text-sm" style="color:var(--text)">Mathematics</span>
+          <i class="fas fa-chevron-down text-xs transition-transform" id="math-arrow"></i>
+        </div>
+        <div class="nav-group-items" id="math-items">
+          
+          <div class="nav-subheader" onclick="navigate('topics','calculus')">➜ Calculus</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t1')">Limits & Continuity</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t2')">Derivatives</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-partial-deriv')">Partial Derivatives</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t3')">Integrals</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-vector-calc')">Vector Calculus</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t4')">Taylor Series</div>
+
+          <div class="nav-subheader" onclick="navigate('topics','linear-algebra')">➜ Linear Algebra</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t5')">Matrices</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t6')">Eigenvectors</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t7')">Transformations</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-vector-spaces')">Vector Spaces</div>
+
+          <div class="nav-subheader" onclick="navigate('topics','differential-equations')">➜ Differential Equations</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t12')">First Order ODE</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-shm-eq')">SHM Equations</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-pop-models')">Population Models</div>
+
+          <div class="nav-subheader" onclick="navigate('topics','sequences-series')">➜ Sequences & Series</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t14')">Convergence Tests</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t15')">Fourier Series</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-inf-series')">Infinite Series</div>
+          
+        </div>
+      </div>
+
+      <!-- Physics -->
+      <div class="nav-group">
+        <div class="nav-group-header" onclick="toggleNavGroup('physics')">
+          <span class="mr-2">⚛️</span>
+          <span class="flex-1 font-semibold text-sm" style="color:var(--text)">Physics</span>
+          <i class="fas fa-chevron-down text-xs transition-transform" id="physics-arrow"></i>
+        </div>
+        <div class="nav-group-items" id="physics-items">
+
+          <div class="nav-subheader" onclick="navigate('topics','mechanics')">➜ Mechanics</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t8')">Projectile Motion</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-circular')">Circular Motion</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-rotational')">Rotational Dynamics</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t9')">SHM</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t17')">The Double Pendulum & Chaos</div>
+
+          <div class="nav-subheader" onclick="navigate('topics','waves')">➜ Waves & Oscillations</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-wave-inter')">Wave Interference</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-resonance')">Resonance</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-standing')">Standing Waves</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-fourier-anal')">Fourier Analysis</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t10')">Wave Mechanics & Superposition</div>
+
+          <div class="nav-subheader" onclick="navigate('topics','em')">➜ Electricity & Magnetism</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-e-field')">Electric Fields</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t11')">Magnetic Flux</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-circuits')">Circuits</div>
+
+          <div class="nav-subheader" onclick="navigate('topics','modern')">➜ Modern Physics</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-relativity')">Relativity</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-quantum')">Quantum Basics</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-photoelectric')">Photoelectric Effect</div>
+          <div class="nav-item sub-item" onclick="navigate('topic-detail','t16')">Vector Fields and Flow</div>
+
+        </div>
+      </div>
+
     </nav>
+
+    <!-- User Section -->
     <div class="p-4 border-t" style="border-color:var(--border)" id="sidebarUser">
       <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogout()">
         <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:var(--accent);color:#fff" id="sidebarAvatar">?</div>
@@ -76,18 +165,28 @@
         <i class="fas fa-sign-out-alt text-sm" style="color:var(--text2);display:none" id="logoutIcon" title="Sign out"></i>
       </div>
     </div>
-    <div class="px-4 pb-4 text-center"><p style="color: var(--text2);font-size: 11px;opacity: 0.7;font-family: 'Space Grotesk', sans-serif;letter-spacing: 1px;">MADE WITH ❤️ BY <br>@SHARVIL MISHRA</p></div>
+    
+    <div class="px-4 pb-4 text-center">
+      <p style="color: var(--text2);font-size: 11px;opacity: 0.7;font-family: 'Space Grotesk', sans-serif;letter-spacing: 1px;">MADE WITH ❤️ BY <br>@SHARVIL MISHRA</p>
+    </div>
   </aside>
+
+  <!-- Main Content Area -->
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <header class="flex items-center gap-4 px-5 py-3 border-b" style="border-color:var(--border);background:var(--card);transition:background .4s" role="banner">
       <button class="btn-ghost md:hidden" onclick="toggleSidebar()" aria-label="Toggle menu"><i class="fas fa-bars text-lg"></i></button>
-      <div class="flex-1 max-w-xl relative"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-sm" style="color:var(--text2)"></i><input class="input pl-10" type="text" id="globalSearch" placeholder="Search topics, notes, references..." onkeydown="if(event.key==='Enter')performSearch(this.value)" aria-label="Global search"></div>
+      <div class="flex-1 max-w-xl relative">
+        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-sm" style="color:var(--text2)"></i>
+        <input class="input pl-10" type="text" id="globalSearch" placeholder="Search topics, notes, references..." onkeydown="if(event.key==='Enter')performSearch(this.value)" aria-label="Global search">
+      </div>
       <div class="flex items-center gap-2">
         <button class="btn-ghost relative" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"><i class="fas fa-moon text-lg" id="themeIcon"></i></button>
         <button class="btn-ghost hidden sm:flex" onclick="showAuth('login')" id="headerAuthBtn"><i class="fas fa-user-circle text-lg"></i><span class="text-sm">Sign In</span></button>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-5 md:p-8" id="mainContent" role="main"><div class="loader" id="appLoader"></div></main>
+    <main class="flex-1 overflow-y-auto p-5 md:p-8" id="mainContent" role="main">
+      <div class="loader" id="appLoader"></div>
+    </main>
   </div>
 </div>
 
