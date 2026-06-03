@@ -2,9 +2,8 @@
 <html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AnimaLearn - Interactive Learning Platform</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -13,183 +12,310 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 <link rel="stylesheet" href="styles.css">
-
 </head>
 <body>
 <div class="toast-container" id="toastContainer"></div>
-
-<!-- Authentication Modal -->
 <div class="modal-overlay" id="authModal">
-  <div class="modal-content">
-    <div id="authLogin">
-      <h2 class="font-display text-2xl font-bold mb-2" style="color:var(--text)">Welcome Back</h2>
-      <p class="text-sm mb-6" style="color:var(--text2)">Sign in to continue your learning journey</p>
-      <div class="space-y-4">
-        <div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">EMAIL</label><input class="input" type="email" id="loginEmail" placeholder="you@example.com"></div>
-        <div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">PASSWORD</label><input class="input" type="password" id="loginPass" placeholder="Enter your password"></div>
-        <button class="btn btn-primary w-full justify-center" id="loginBtn" onclick="handleLogin()">Sign In</button>
-        <div class="flex items-center gap-3 my-2"><div class="flex-1 h-px" style="background:var(--border)"></div><span class="text-xs" style="color:var(--text2)">OR</span><div class="flex-1 h-px" style="background:var(--border)"></div></div>
-        <button class="btn btn-outline w-full justify-center" onclick="handleOAuth('Google')"><i class="fab fa-google"></i> Continue with Google</button>
-        <button class="btn btn-outline w-full justify-center" onclick="handleOAuth('GitHub')"><i class="fab fa-github"></i> Continue with GitHub</button>
-        <p class="text-center text-sm mt-4" style="color:var(--text2)">Don't have an account? <a class="cursor-pointer font-semibold" style="color:var(--accent)" onclick="toggleAuth('register')">Register</a></p>
-      </div>
-    </div>
-    <div id="authRegister" style="display:none">
-      <h2 class="font-display text-2xl font-bold mb-2" style="color:var(--text)">Create Account</h2>
-      <p class="text-sm mb-6" style="color:var(--text2)">Start visualizing complex concepts today</p>
-      <div class="space-y-4">
-        <div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">FULL NAME</label><input class="input" type="text" id="regName" placeholder="Your name"></div>
-        <div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">EMAIL</label><input class="input" type="email" id="regEmail" placeholder="you@example.com"></div>
-        <div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">PASSWORD</label><input class="input" type="password" id="regPass" placeholder="Create a password (min 6 chars)"></div>
-        <div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">DIFFICULTY PREFERENCE</label><select class="input" id="regDiff"><option value="beginner">Beginner</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></div>
-        <button class="btn btn-primary w-full justify-center" id="regBtn" onclick="handleRegister()">Create Account</button>
-        <p class="text-center text-sm mt-4" style="color:var(--text2)">Already have an account? <a class="cursor-pointer font-semibold" style="color:var(--accent)" onclick="toggleAuth('login')">Sign In</a></p>
-      </div>
-    </div>
-    <button class="btn-ghost absolute top-4 right-4" onclick="closeAuth()" aria-label="Close"><i class="fas fa-times text-lg"></i></button>
-  </div>
+<div class="modal-content">
+<div id="authLogin">
+<h2 class="font-display text-2xl font-bold mb-2" style="color:var(--text)">Welcome Back</h2>
+<p class="text-sm mb-6" style="color:var(--text2)">Sign in to continue your learning journey</p>
+<form onsubmit="handleLogin();return false;" class="space-y-4">
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">EMAIL</label><input class="input" type="email" id="loginEmail" placeholder="you@example.com" required></div>
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">PASSWORD</label><input class="input" type="password" id="loginPass" placeholder="Enter your password" required></div>
+<button type="submit" class="btn btn-primary w-full justify-center" id="loginBtn">Sign In</button>
+<div class="flex items-center gap-3 my-2"><div class="flex-1 h-px" style="background:var(--border)"></div><span class="text-xs" style="color:var(--text2)">OR</span><div class="flex-1 h-px" style="background:var(--border)"></div></div>
+<button type="button" class="btn btn-outline w-full justify-center" onclick="handleOAuth('Google')"><i class="fab fa-google"></i> Continue with Google</button>
+<button type="button" class="btn btn-outline w-full justify-center" onclick="handleOAuth('GitHub')"><i class="fab fa-github"></i> Continue with GitHub</button>
+<p class="text-center text-sm mt-4" style="color:var(--text2)">Don't have an account? <a class="cursor-pointer font-semibold" style="color:var(--accent)" onclick="toggleAuth('register')">Register</a></p>
+</form>
 </div>
-
-<!-- Mobile Overlay -->
+<div id="authRegister" style="display:none">
+<h2 class="font-display text-2xl font-bold mb-2" style="color:var(--text)">Create Account</h2>
+<p class="text-sm mb-6" style="color:var(--text2)">Start visualizing complex concepts today</p>
+<form onsubmit="handleRegister();return false;" class="space-y-4">
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">FULL NAME</label><input class="input" type="text" id="regName" placeholder="Your name" required></div>
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">EMAIL</label><input class="input" type="email" id="regEmail" placeholder="you@example.com" required></div>
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">PASSWORD</label><input class="input" type="password" id="regPass" placeholder="Create a password (min 6 chars)" required></div>
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">DIFFICULTY PREFERENCE</label><select class="input" id="regDiff"><option value="beginner">Beginner</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></div>
+<button type="submit" class="btn btn-primary w-full justify-center" id="regBtn">Create Account</button>
+<p class="text-center text-sm mt-4" style="color:var(--text2)">Already have an account? <a class="cursor-pointer font-semibold" style="color:var(--accent)" onclick="toggleAuth('login')">Sign In</a></p>
+</form>
+</div>
+<button class="btn-ghost absolute top-4 right-4" onclick="closeAuth()" aria-label="Close"><i class="fas fa-times text-lg"></i></button>
+</div>
+</div>
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
-
 <div class="flex h-screen">
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-    <div class="p-5 border-b" style="border-color:var(--border)">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--accent)"><i class="fas fa-atom text-white text-lg"></i></div>
-        <div>
-          <h1 class="font-display font-bold text-lg leading-tight" style="color:var(--text)">AnimaLearn</h1>
-          <p class="text-xs" style="color:var(--text2)">Visual Learning</p>
-        </div>
-      </div>
-    </div>
-    
-    <nav class="flex-1 py-3 overflow-y-auto">
-      <!-- Main Navigation -->
-      <div class="px-5 py-2"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">MAIN</span></div>
-      <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')"><i class="fas fa-th-large w-5 text-center"></i>Dashboard</div>
-      <div class="nav-item" data-page="topics" onclick="navigate('topics')"><i class="fas fa-shapes w-5 text-center"></i>All Topics</div>
-      <div class="nav-item" data-page="notes" onclick="navigate('notes')"><i class="fas fa-sticky-note w-5 text-center"></i>Notes</div>
-      <div class="nav-item" data-page="references" onclick="navigate('references')"><i class="fas fa-book-open w-5 text-center"></i>References</div>
-      
-      <!-- Systematic Subjects Structure -->
-      <div class="px-5 py-2 mt-4"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">SUBJECTS</span></div>
-      
-      <!-- Mathematics -->
-      <div class="nav-group">
-        <div class="nav-group-header" onclick="toggleNavGroup('math')">
-          <span class="mr-2">📘</span>
-          <span class="flex-1 font-semibold text-sm" style="color:var(--text)">Mathematics</span>
-          <i class="fas fa-chevron-down text-xs transition-transform" id="math-arrow"></i>
-        </div>
-        <div class="nav-group-items" id="math-items">
-          
-          <div class="nav-subheader" onclick="navigate('topics','calculus')">➜ Calculus</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t1')">Limits & Continuity</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t2')">Derivatives</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-partial-deriv')">Partial Derivatives</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t3')">Integrals</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-vector-calc')">Vector Calculus</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t4')">Taylor Series</div>
-
-          <div class="nav-subheader" onclick="navigate('topics','linear-algebra')">➜ Linear Algebra</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t5')">Matrices</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t6')">Eigenvectors</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t7')">Transformations</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-vector-spaces')">Vector Spaces</div>
-
-          <div class="nav-subheader" onclick="navigate('topics','differential-equations')">➜ Differential Equations</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t12')">First Order ODE</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-shm-eq')">SHM Equations</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-pop-models')">Population Models</div>
-
-          <div class="nav-subheader" onclick="navigate('topics','sequences-series')">➜ Sequences & Series</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t14')">Convergence Tests</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t15')">Fourier Series</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-inf-series')">Infinite Series</div>
-          
-        </div>
-      </div>
-
-      <!-- Physics -->
-      <div class="nav-group">
-        <div class="nav-group-header" onclick="toggleNavGroup('physics')">
-          <span class="mr-2">⚛️</span>
-          <span class="flex-1 font-semibold text-sm" style="color:var(--text)">Physics</span>
-          <i class="fas fa-chevron-down text-xs transition-transform" id="physics-arrow"></i>
-        </div>
-        <div class="nav-group-items" id="physics-items">
-
-          <div class="nav-subheader" onclick="navigate('topics','mechanics')">➜ Mechanics</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t8')">Projectile Motion</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-circular')">Circular Motion</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-rotational')">Rotational Dynamics</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t9')">SHM</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t17')">The Double Pendulum & Chaos</div>
-
-          <div class="nav-subheader" onclick="navigate('topics','waves')">➜ Waves & Oscillations</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-wave-inter')">Wave Interference</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-resonance')">Resonance</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-standing')">Standing Waves</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-fourier-anal')">Fourier Analysis</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t10')">Wave Mechanics & Superposition</div>
-
-          <div class="nav-subheader" onclick="navigate('topics','em')">➜ Electricity & Magnetism</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-e-field')">Electric Fields</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t11')">Magnetic Flux</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-circuits')">Circuits</div>
-
-          <div class="nav-subheader" onclick="navigate('topics','modern')">➜ Modern Physics</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-relativity')">Relativity</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-quantum')">Quantum Basics</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t-photoelectric')">Photoelectric Effect</div>
-          <div class="nav-item sub-item" onclick="navigate('topic-detail','t16')">Vector Fields and Flow</div>
-
-        </div>
-      </div>
-
-    </nav>
-
-    <!-- User Section -->
-    <div class="p-4 border-t" style="border-color:var(--border)" id="sidebarUser">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogout()">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:var(--accent);color:#fff" id="sidebarAvatar">?</div>
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold truncate" style="color:var(--text)" id="sidebarName">Guest</p>
-          <p class="text-xs truncate" style="color:var(--text2)" id="sidebarEmail">Sign in to get started</p>
-        </div>
-        <i class="fas fa-sign-out-alt text-sm" style="color:var(--text2);display:none" id="logoutIcon" title="Sign out"></i>
-      </div>
-    </div>
-    
-    <div class="px-4 pb-4 text-center">
-      <p style="color: var(--text2);font-size: 11px;opacity: 0.7;font-family: 'Space Grotesk', sans-serif;letter-spacing: 1px;">MADE WITH ❤️ BY <br>@SHARVIL MISHRA</p>
-    </div>
-  </aside>
-
-  <!-- Main Content Area -->
-  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-    <header class="flex items-center gap-4 px-5 py-3 border-b" style="border-color:var(--border);background:var(--card);transition:background .4s" role="banner">
-      <button class="btn-ghost md:hidden" onclick="toggleSidebar()" aria-label="Toggle menu"><i class="fas fa-bars text-lg"></i></button>
-      <div class="flex-1 max-w-xl relative">
-        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-sm" style="color:var(--text2)"></i>
-        <input class="input pl-10" type="text" id="globalSearch" placeholder="Search topics, notes, references..." onkeydown="if(event.key==='Enter')performSearch(this.value)" aria-label="Global search">
-      </div>
-      <div class="flex items-center gap-2">
-        <button class="btn-ghost relative" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"><i class="fas fa-moon text-lg" id="themeIcon"></i></button>
-        <button class="btn-ghost hidden sm:flex" onclick="showAuth('login')" id="headerAuthBtn"><i class="fas fa-user-circle text-lg"></i><span class="text-sm">Sign In</span></button>
-      </div>
-    </header>
-    <main class="flex-1 overflow-y-auto p-5 md:p-8" id="mainContent" role="main">
-      <div class="loader" id="appLoader"></div>
-    </main>
-  </div>
+<aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+<div class="p-5 border-b" style="border-color:var(--border)">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--accent)"><i class="fas fa-atom text-white text-lg"></i></div>
+<div>
+<h1 class="font-display font-bold text-lg leading-tight" style="color:var(--text)">AnimaLearn</h1>
+<p class="text-xs" style="color:var(--text2)">Visual Learning</p>
 </div>
-
+</div>
+</div>
+<nav class="flex-1 py-3 overflow-y-auto">
+<div class="px-5 py-2"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">MAIN</span></div>
+<button class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')"><i class="fas fa-th-large w-5 text-center"></i>Dashboard</button>
+<button class="nav-item" data-page="topics" onclick="navigate('topics')"><i class="fas fa-shapes w-5 text-center"></i>All Topics</button>
+<button class="nav-item" data-page="notes" onclick="navigate('notes')"><i class="fas fa-sticky-note w-5 text-center"></i>Notes</button>
+<button class="nav-item" data-page="references" onclick="navigate('references')"><i class="fas fa-book-open w-5 text-center"></i>References</button>
+<div class="px-5 py-2 mt-4"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">SUBJECTS</span></div>
+<div class="nav-group">
+<div class="nav-group-header" onclick="toggleNavGroup('math')">
+<span class="mr-2">📘</span>
+<span class="flex-1 font-semibold text-sm" style="color:var(--text)">Mathematics</span>
+<i class="fas fa-chevron-down text-xs transition-transform" id="math-arrow"></i>
+</div>
+<div class="nav-group-items" id="math-items">
+<button class="nav-subheader" onclick="navigate('topics','calculus')">➜ Calculus</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t1')">Limits & Continuity</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t2')">Derivatives</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-partial-deriv')">Partial Derivatives</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t3')">Integrals</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-vector-calc')">Vector Calculus</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t4')">Taylor Series</button>
+<button class="nav-subheader" onclick="navigate('topics','linear-algebra')">➜ Linear Algebra</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t5')">Matrices</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t6')">Eigenvectors</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t7')">Transformations</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-vector-spaces')">Vector Spaces</button>
+<button class="nav-subheader" onclick="navigate('topics','differential-equations')">➜ Differential Equations</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t12')">First Order ODE</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-shm-eq')">SHM Equations</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-pop-models')">Population Models</button>
+<button class="nav-subheader" onclick="navigate('topics','sequences-series')">➜ Sequences & Series</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t14')">Convergence Tests</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t15')">Fourier Series</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-inf-series')">Infinite Series</button>
+</div>
+</div>
+<div class="nav-group">
+<div class="nav-group-header" onclick="toggleNavGroup('physics')">
+<span class="mr-2">⚛️</span>
+<span class="flex-1 font-semibold text-sm" style="color:var(--text)">Physics</span>
+<i class="fas fa-chevron-down text-xs transition-transform" id="physics-arrow"></i>
+</div>
+<div class="nav-group-items" id="physics-items">
+<button class="nav-subheader" onclick="navigate('topics','mechanics')">➜ Mechanics</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t8')">Projectile Motion</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-circular')">Circular Motion</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-rotational')">Rotational Dynamics</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t9')">SHM</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t17')">The Double Pendulum & Chaos</button>
+<button class="nav-subheader" onclick="navigate('topics','waves')">➜ Waves & Oscillations</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-wave-inter')">Wave Interference</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-resonance')">Resonance</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-standing')">Standing Waves</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-fourier-anal')">Fourier Analysis</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t10')">Wave Mechanics & Superposition</button>
+<button class="nav-subheader" onclick="navigate('topics','em')">➜ Electricity & Magnetism</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-e-field')">Electric Fields</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t11')">Magnetic Flux</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-circuits')">Circuits</button>
+<button class="nav-subheader" onclick="navigate('topics','modern')">➜ Modern Physics</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-relativity')">Relativity</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-quantum')">Quantum Basics</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-photoelectric')">Photoelectric Effect</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t16')">Vector Fields and Flow</button>
+</div>
+</div>
+</nav>
+<div class="p-4 border-t" style="border-color:var(--border)" id="sidebarUser">
+<div class="flex items-center gap-3 cursor-pointer" onclick="handleLogout()">
+<div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:var(--accent);color:#fff" id="sidebarAvatar">?</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate" style="color:var(--text)" id="sidebarName">Guest</p>
+<p class="text-xs truncate" style="color:var(--text2)" id="sidebarEmail">Sign in to get started</p>
+</div>
+<i class="fas fa-sign-out-alt text-sm" style="color:var(--text2);display:none" id="logoutIcon" title="Sign out"></i>
+</div>
+</div>
+<div class="px-4 pb-4 text-center">
+<p style="color:var(--text2);font-size:11px;opacity:.7;font-family:'Space Grotesk',sans-serif;letter-spacing:1px">MADE WITH ❤️ BY <br>@SHARVIL MISHRA</p>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<header class="flex items-center gap-4 px-5 py-3 border-b" style="border-color:var(--border);background:var(--card);transition:background .4s" role="banner">
+<button class="btn-ghost md:hidden" onclick="toggleSidebar()" aria-label="Toggle menu"><i class="fas fa-bars text-lg"></i></button>
+<div class="flex-1 max-w-xl relative">
+<i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-sm" style="color:var(--text2)"></i>
+<input class="input pl-10" type="text" id="globalSearch" placeholder="Search topics, notes, references..." onkeydown="if(event.key==='Enter')performSearch(this.value)" aria-label="Global search">
+</div>
+<div class="flex items-center gap-2">
+<button class="btn-ghost relative" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"><i class="fas fa-moon text-lg" id="themeIcon"></i></button>
+<button class="btn-ghost hidden sm:flex" onclick="showAuth('login')" id="headerAuthBtn"><i class="fas fa-user-circle text-lg"></i><span class="text-sm">Sign In</span></button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-5 md:p-8" id="mainContent" role="main">
+<div class="loader" id="appLoader"></div>
+</main>
+</div>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AnimaLearn - Interactive Learning Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="toast-container" id="toastContainer"></div>
+<div class="modal-overlay" id="authModal">
+<div class="modal-content">
+<div id="authLogin">
+<h2 class="font-display text-2xl font-bold mb-2" style="color:var(--text)">Welcome Back</h2>
+<p class="text-sm mb-6" style="color:var(--text2)">Sign in to continue your learning journey</p>
+<form onsubmit="handleLogin();return false;" class="space-y-4">
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">EMAIL</label><input class="input" type="email" id="loginEmail" placeholder="you@example.com" required></div>
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">PASSWORD</label><input class="input" type="password" id="loginPass" placeholder="Enter your password" required></div>
+<button type="submit" class="btn btn-primary w-full justify-center" id="loginBtn">Sign In</button>
+<div class="flex items-center gap-3 my-2"><div class="flex-1 h-px" style="background:var(--border)"></div><span class="text-xs" style="color:var(--text2)">OR</span><div class="flex-1 h-px" style="background:var(--border)"></div></div>
+<button type="button" class="btn btn-outline w-full justify-center" onclick="handleOAuth('Google')"><i class="fab fa-google"></i> Continue with Google</button>
+<button type="button" class="btn btn-outline w-full justify-center" onclick="handleOAuth('GitHub')"><i class="fab fa-github"></i> Continue with GitHub</button>
+<p class="text-center text-sm mt-4" style="color:var(--text2)">Don't have an account? <a class="cursor-pointer font-semibold" style="color:var(--accent)" onclick="toggleAuth('register')">Register</a></p>
+</form>
+</div>
+<div id="authRegister" style="display:none">
+<h2 class="font-display text-2xl font-bold mb-2" style="color:var(--text)">Create Account</h2>
+<p class="text-sm mb-6" style="color:var(--text2)">Start visualizing complex concepts today</p>
+<form onsubmit="handleRegister();return false;" class="space-y-4">
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">FULL NAME</label><input class="input" type="text" id="regName" placeholder="Your name" required></div>
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">EMAIL</label><input class="input" type="email" id="regEmail" placeholder="you@example.com" required></div>
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">PASSWORD</label><input class="input" type="password" id="regPass" placeholder="Create a password (min 6 chars)" required></div>
+<div><label class="block text-xs font-semibold mb-1" style="color:var(--text2)">DIFFICULTY PREFERENCE</label><select class="input" id="regDiff"><option value="beginner">Beginner</option><option value="intermediate" selected>Intermediate</option><option value="advanced">Advanced</option></select></div>
+<button type="submit" class="btn btn-primary w-full justify-center" id="regBtn">Create Account</button>
+<p class="text-center text-sm mt-4" style="color:var(--text2)">Already have an account? <a class="cursor-pointer font-semibold" style="color:var(--accent)" onclick="toggleAuth('login')">Sign In</a></p>
+</form>
+</div>
+<button class="btn-ghost absolute top-4 right-4" onclick="closeAuth()" aria-label="Close"><i class="fas fa-times text-lg"></i></button>
+</div>
+</div>
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
+<div class="flex h-screen">
+<aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+<div class="p-5 border-b" style="border-color:var(--border)">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--accent)"><i class="fas fa-atom text-white text-lg"></i></div>
+<div>
+<h1 class="font-display font-bold text-lg leading-tight" style="color:var(--text)">AnimaLearn</h1>
+<p class="text-xs" style="color:var(--text2)">Visual Learning</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 py-3 overflow-y-auto">
+<div class="px-5 py-2"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">MAIN</span></div>
+<button class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')"><i class="fas fa-th-large w-5 text-center"></i>Dashboard</button>
+<button class="nav-item" data-page="topics" onclick="navigate('topics')"><i class="fas fa-shapes w-5 text-center"></i>All Topics</button>
+<button class="nav-item" data-page="notes" onclick="navigate('notes')"><i class="fas fa-sticky-note w-5 text-center"></i>Notes</button>
+<button class="nav-item" data-page="references" onclick="navigate('references')"><i class="fas fa-book-open w-5 text-center"></i>References</button>
+<div class="px-5 py-2 mt-4"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">SUBJECTS</span></div>
+<div class="nav-group">
+<div class="nav-group-header" onclick="toggleNavGroup('math')">
+<span class="mr-2">📘</span>
+<span class="flex-1 font-semibold text-sm" style="color:var(--text)">Mathematics</span>
+<i class="fas fa-chevron-down text-xs transition-transform" id="math-arrow"></i>
+</div>
+<div class="nav-group-items" id="math-items">
+<button class="nav-subheader" onclick="navigate('topics','calculus')">➜ Calculus</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t1')">Limits & Continuity</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t2')">Derivatives</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-partial-deriv')">Partial Derivatives</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t3')">Integrals</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-vector-calc')">Vector Calculus</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t4')">Taylor Series</button>
+<button class="nav-subheader" onclick="navigate('topics','linear-algebra')">➜ Linear Algebra</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t5')">Matrices</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t6')">Eigenvectors</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t7')">Transformations</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-vector-spaces')">Vector Spaces</button>
+<button class="nav-subheader" onclick="navigate('topics','differential-equations')">➜ Differential Equations</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t12')">First Order ODE</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-shm-eq')">SHM Equations</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-pop-models')">Population Models</button>
+<button class="nav-subheader" onclick="navigate('topics','sequences-series')">➜ Sequences & Series</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t14')">Convergence Tests</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t15')">Fourier Series</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-inf-series')">Infinite Series</button>
+</div>
+</div>
+<div class="nav-group">
+<div class="nav-group-header" onclick="toggleNavGroup('physics')">
+<span class="mr-2">⚛️</span>
+<span class="flex-1 font-semibold text-sm" style="color:var(--text)">Physics</span>
+<i class="fas fa-chevron-down text-xs transition-transform" id="physics-arrow"></i>
+</div>
+<div class="nav-group-items" id="physics-items">
+<button class="nav-subheader" onclick="navigate('topics','mechanics')">➜ Mechanics</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t8')">Projectile Motion</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-circular')">Circular Motion</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-rotational')">Rotational Dynamics</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t9')">SHM</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t17')">The Double Pendulum & Chaos</button>
+<button class="nav-subheader" onclick="navigate('topics','waves')">➜ Waves & Oscillations</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-wave-inter')">Wave Interference</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-resonance')">Resonance</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-standing')">Standing Waves</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-fourier-anal')">Fourier Analysis</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t10')">Wave Mechanics & Superposition</button>
+<button class="nav-subheader" onclick="navigate('topics','em')">➜ Electricity & Magnetism</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-e-field')">Electric Fields</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t11')">Magnetic Flux</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-circuits')">Circuits</button>
+<button class="nav-subheader" onclick="navigate('topics','modern')">➜ Modern Physics</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-relativity')">Relativity</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-quantum')">Quantum Basics</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t-photoelectric')">Photoelectric Effect</button>
+<button class="nav-item sub-item" onclick="navigate('topic-detail','t16')">Vector Fields and Flow</button>
+</div>
+</div>
+</nav>
+<div class="p-4 border-t" style="border-color:var(--border)" id="sidebarUser">
+<div class="flex items-center gap-3 cursor-pointer" onclick="handleLogout()">
+<div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:var(--accent);color:#fff" id="sidebarAvatar">?</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate" style="color:var(--text)" id="sidebarName">Guest</p>
+<p class="text-xs truncate" style="color:var(--text2)" id="sidebarEmail">Sign in to get started</p>
+</div>
+<i class="fas fa-sign-out-alt text-sm" style="color:var(--text2);display:none" id="logoutIcon" title="Sign out"></i>
+</div>
+</div>
+<div class="px-4 pb-4 text-center">
+<p style="color:var(--text2);font-size:11px;opacity:.7;font-family:'Space Grotesk',sans-serif;letter-spacing:1px">MADE WITH ❤️ BY <br>@SHARVIL MISHRA</p>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<header class="flex items-center gap-4 px-5 py-3 border-b" style="border-color:var(--border);background:var(--card);transition:background .4s" role="banner">
+<button class="btn-ghost md:hidden" onclick="toggleSidebar()" aria-label="Toggle menu"><i class="fas fa-bars text-lg"></i></button>
+<div class="flex-1 max-w-xl relative">
+<i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-sm" style="color:var(--text2)"></i>
+<input class="input pl-10" type="text" id="globalSearch" placeholder="Search topics, notes, references..." onkeydown="if(event.key==='Enter')performSearch(this.value)" aria-label="Global search">
+</div>
+<div class="flex items-center gap-2">
+<button class="btn-ghost relative" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"><i class="fas fa-moon text-lg" id="themeIcon"></i></button>
+<button class="btn-ghost hidden sm:flex" onclick="showAuth('login')" id="headerAuthBtn"><i class="fas fa-user-circle text-lg"></i><span class="text-sm">Sign In</span></button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-5 md:p-8" id="mainContent" role="main">
+<div class="loader" id="appLoader"></div>
+</main>
+</div>
+</div>
 <script src="config.js"></script>
 <script src="utils.js"></script>
 <script src="auth.js"></script>
@@ -197,7 +323,6 @@
 <script src="router.js"></script>
 <script src="animations.js"></script>
 <script src="pages.js"></script>
-<script src="app.js"></script>
-
+<script src="app.js"></script> 
 </body>
 </html>
