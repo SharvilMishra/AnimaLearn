@@ -7,6 +7,11 @@
 
 <link rel="icon" type="image/png" sizes="32x32" href="logo2.png" id="dynamicFavicon">
 <link rel="apple-touch-icon" sizes="180x180" href="logo2.png">
+
+  
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8f43ee">
+
   
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -180,6 +185,14 @@
   </div>
 </div>
 
+  
+<script>
+  if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+</script>
+
+<script src="sw.js"></script>
 <script src="config.js"></script>
 <script src="utils.js"></script>
 <script src="auth.js"></script>
