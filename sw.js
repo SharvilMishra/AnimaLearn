@@ -1,8 +1,19 @@
-const CACHE_NAME = 'animalearn-v2'; // <-- CHANGE THIS NUMBER EVERY TIME YOU UPDATE YOUR CODE!
-const urlsToCache = ['/', '/index.html', '/styles.css'];
+const CACHE_NAME = 'animalearn-v3'; // Change this version number anytime you make a huge update
+const urlsToCache = [
+  '/', 
+  '/index.html', 
+  '/styles.css',
+  '/js/config.js',
+  '/js/utils.js',
+  '/js/auth.js',
+  '/js/db.js',
+  '/js/router.js',
+  '/js/animations.js',
+  '/js/pages.js',
+  '/js/app.js'
+];
 
 self.addEventListener('install', event => {
-  // Tell the browser to activate the new worker immediately instead of waiting
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
@@ -10,18 +21,31 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  // Delete old caches
   event.waitUntil(
     caches.keys().then(keys => Promise.all(
-      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      keys.map(key => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      })
     ))
   );
-  // Take control of all open tabs immediately
-  event.waitUntil(clients.claim());
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
+  // For normal page loads, try network first, fall back to cache
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    fetch(event.request)
+      .then(response => {
+        // If successful, clone it, put it in the cache, and return the network response
+        if (response && response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+        }
+        return response;
+      })
+      .catch(() => {
+        // If the network fails (user is offline), try to get it from the cache
+        return caches.match(event.request);
+      })
   );
 });
