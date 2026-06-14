@@ -4,32 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AnimaLearn - Interactive Learning Platform</title>
-
 <link rel="icon" type="image/png" sizes="32x32" href="logo2.png" id="dynamicFavicon">
 <link rel="apple-touch-icon" sizes="180x180" href="logo2.png">
-
-  
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8f43ee">
-
-  
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 <link rel="stylesheet" href="styles.css">
-
 </head>
 <body>
 <div class="toast-container" id="toastContainer"></div>
-
-<!-- Authentication Modal -->
 <div class="modal-overlay" id="authModal">
   <div class="modal-content">
     <div id="authLogin">
@@ -60,24 +51,15 @@
     <button class="btn-ghost absolute top-4 right-4" onclick="closeAuth()" aria-label="Close"><i class="fas fa-times text-lg"></i></button>
   </div>
 </div>
-
-<!-- Mobile Overlay -->
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
-
 <div class="flex h-screen">
-
-  <!-- Sidebar -->
 <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
   <div class="p-5 border-b" style="border-color:var(--border)">
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--accent)"><i class="fas fa-atom text-white text-lg"></i></div>
-      <div>
-        <h1 class="font-display font-bold text-lg leading-tight" style="color:var(--text)">AnimaLearn</h1>
-        <p class="text-xs" style="color:var(--text2)">Visual Learning</p>
-      </div>
+      <div><h1 class="font-display font-bold text-lg leading-tight" style="color:var(--text)">AnimaLearn</h1><p class="text-xs" style="color:var(--text2)">Visual Learning</p></div>
     </div>
   </div>
-  
   <nav class="flex-1 py-3 overflow-y-auto">
     <div class="px-5 py-2"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">MAIN</span></div>
     <button class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')"><i class="fas fa-th-large w-5 text-center"></i>Dashboard</button>
@@ -85,15 +67,9 @@
     <button class="nav-item" data-page="notes" onclick="navigate('notes')"><i class="fas fa-sticky-note w-5 text-center"></i>Notes</button>
     <button class="nav-item" data-page="references" onclick="navigate('references')"><i class="fas fa-book-open w-5 text-center"></i>References</button>
     <button class="nav-item" data-page="contact" onclick="navigate('contact')"><i class="fas fa-headset w-5 text-center"></i>Contact & Help</button>
-    
     <div class="px-5 py-2 mt-4"><span class="text-xs font-semibold tracking-wider" style="color:var(--text2);opacity:.6">SUBJECTS</span></div>
-    
     <div class="nav-group">
-      <div class="nav-group-header" onclick="toggleNavGroup('math')">
-        <span class="mr-2">📘</span>
-        <span class="flex-1 font-semibold text-sm" style="color:var(--text)">Mathematics</span>
-        <i class="fas fa-chevron-down text-xs transition-transform" id="math-arrow"></i>
-      </div>
+      <div class="nav-group-header" onclick="toggleNavGroup('math')"><span class="mr-2">📘</span><span class="flex-1 font-semibold text-sm" style="color:var(--text)">Mathematics</span><i class="fas fa-chevron-down text-xs transition-transform" id="math-arrow"></i></div>
       <div class="nav-group-items" id="math-items">
         <button class="nav-subheader" onclick="navigate('topics','calculus')">➜ Calculus</button>
         <button class="nav-item sub-item" onclick="navigate('topic-detail','t1')">Limits & Continuity</button>
@@ -117,13 +93,8 @@
         <button class="nav-item sub-item" onclick="navigate('topic-detail','t-inf-series')">Infinite Series</button>
       </div>
     </div>
-
     <div class="nav-group">
-      <div class="nav-group-header" onclick="toggleNavGroup('physics')">
-        <span class="mr-2">⚛️</span>
-        <span class="flex-1 font-semibold text-sm" style="color:var(--text)">Physics</span>
-        <i class="fas fa-chevron-down text-xs transition-transform" id="physics-arrow"></i>
-      </div>
+      <div class="nav-group-header" onclick="toggleNavGroup('physics')"><span class="mr-2">⚛️</span><span class="flex-1 font-semibold text-sm" style="color:var(--text)">Physics</span><i class="fas fa-chevron-down text-xs transition-transform" id="physics-arrow"></i></div>
       <div class="nav-group-items" id="physics-items">
         <button class="nav-subheader" onclick="navigate('topics','mechanics')">➜ Mechanics</button>
         <button class="nav-item sub-item" onclick="navigate('topic-detail','t8')">Projectile Motion</button>
@@ -149,25 +120,15 @@
       </div>
     </div>
   </nav>
-
-  <!-- User Section -->
   <div class="p-4 border-t" style="border-color:var(--border)" id="sidebarUser">
     <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogout()">
       <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:var(--accent);color:#fff" id="sidebarAvatar">?</div>
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold truncate" style="color:var(--text)" id="sidebarName">Guest</p>
-        <p class="text-xs truncate" style="color:var(--text2)" id="sidebarEmail">Sign in to get started</p>
-      </div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate" style="color:var(--text)" id="sidebarName">Guest</p><p class="text-xs truncate" style="color:var(--text2)" id="sidebarEmail">Sign in to get started</p></div>
       <i class="fas fa-sign-out-alt text-sm" style="color:var(--text2);display:none" id="logoutIcon" title="Sign out"></i>
     </div>
   </div>
-  
-  <div class="px-4 pb-4 text-center">
-    <p style="color: var(--text2);font-size: 11px;opacity: 0.7;font-family: 'Space Grotesk', sans-serif;letter-spacing: 1px;">MADE WITH ❤️ BY <br>@SHARVIL MISHRA</p>
-  </div>
+  <div class="px-4 pb-4 text-center"><p style="color:var(--text2);font-size:11px;opacity:.7;font-family:'Space Grotesk',sans-serif;letter-spacing:1px">MADE WITH ❤️ BY <br>@SHARVIL MISHRA</p></div>
 </aside>
-
-  <!-- Main Content Area -->
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <header class="flex items-center gap-4 px-5 py-3 border-b" style="border-color:var(--border);background:var(--card);transition:background .4s" role="banner">
       <button class="btn-ghost md:hidden" onclick="toggleSidebar()" aria-label="Toggle menu"><i class="fas fa-bars text-lg"></i></button>
@@ -177,6 +138,8 @@
       </div>
       <div class="flex items-center gap-2">
         <button class="btn-ghost relative" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"><i class="fas fa-moon text-lg" id="themeIcon"></i></button>
+        <button class="btn-ghost relative" id="notifBellBtn" onclick="toggleNotifDropdown()" aria-label="Notifications"><i class="fas fa-bell text-lg"></i><span class="notif-badge" id="notifBadge" style="display:none"></span></button>
+        <div class="notif-dropdown" id="notifDropdown"><div class="p-3 border-b" style="border-color:var(--border)"><div class="flex items-center justify-between"><h4 class="font-display font-bold text-sm">Notifications</h4><button class="text-xs font-semibold cursor-pointer hover:underline" style="color:var(--accent);background:none;border:none" onclick="markAllNotifsRead()">Mark all read</button></div></div><div class="notif-list" id="notifList"><p class="text-sm text-center py-6" style="color:var(--text2)">No notifications yet</p></div></div>
         <button class="btn-ghost hidden sm:flex" onclick="showAuth('login')" id="headerAuthBtn"><i class="fas fa-user-circle text-lg"></i><span class="text-sm">Sign In</span></button>
       </div>
     </header>
@@ -185,8 +148,6 @@
     </main>
   </div>
 </div>
-
-  
 <script>
   if('serviceWorker' in navigator) {
     let newWorker;
@@ -195,7 +156,6 @@
         newWorker = reg.installing;
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'activated') {
-            // Use your existing showToast function!
             showToast('A new update is available! Refresh to update.', 'info');
           }
         });
@@ -204,7 +164,6 @@
   }
 </script>
 
-  
 <script src="sw.js"></script>
 <script src="config.js"></script>
 <script src="utils.js"></script>
@@ -218,5 +177,3 @@
 
 </body>
 </html>
-
-
