@@ -1,4 +1,4 @@
-const CACHE_NAME = 'animalearn-v3'; // Change this version number anytime you make a huge update
+const CACHE_NAME = 'animalearn-v3.01'; // Change this version number anytime you make a huge update
 const urlsToCache = [
   '/', 
   '/index.html', 
