@@ -93,3 +93,26 @@ h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif}
 .loader{border:4px solid var(--border);border-top:4px solid var(--accent);border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:40vh auto}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 button.nav-item,button.nav-subheader{border-top:none;border-right:none;border-bottom:none;background:none;width:100%;text-align:left;font-family:inherit;border-radius:0;outline:none;-webkit-appearance:none}
+/* ===== NOTIFICATION SYSTEM ===== */
+.notif-badge{position:absolute;top:2px;right:2px;min-width:16px;height:16px;border-radius:999px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;line-height:1;transform:scale(0);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.notif-badge.visible{transform:scale(1);display:flex}
+.notif-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:340px;max-height:420px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.25);z-index:9999;overflow:hidden;opacity:0;transform:translateY(-8px) scale(.97);pointer-events:none;transition:opacity .2s,transform .2s cubic-bezier(.34,1.56,.64,1)}
+.notif-dropdown.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.notif-list{overflow-y:auto;max-height:350px;padding:6px 0}
+.notif-list::-webkit-scrollbar{width:4px}
+.notif-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.notif-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;transition:background .15s;cursor:default}
+.notif-item:hover{background:var(--border)}
+.notif-item.unread{background:rgba(143,67,238,.06)}
+.notif-item.unread:hover{background:rgba(143,67,238,.12)}
+.notif-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+.notif-icon.success{background:rgba(16,185,129,.15);color:#10b981}
+.notif-icon.info{background:rgba(59,130,246,.15);color:#3b82f6}
+.notif-icon.warning{background:rgba(245,158,11,.15);color:#f59e0b}
+.notif-icon.error{background:rgba(239,68,68,.15);color:#ef4444}
+.notif-body{flex:1;min-width:0}
+.notif-message{font-size:13px;color:var(--text);line-height:1.4;word-break:break-word}
+.notif-time{font-size:11px;color:var(--text2);margin-top:3px}
+.notif-empty{text-align:center;padding:32px 16px;color:var(--text2);font-size:13px}
+.notif-empty i{font-size:28px;opacity:.4;display:block;margin-bottom:10px}
+@media(max-width:400px){.notif-dropdown{width:calc(100vw - 32px);right:-8px}}
