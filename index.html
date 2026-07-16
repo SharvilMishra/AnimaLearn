@@ -25,6 +25,7 @@
 <div class="flex items-center gap-2 relative">
 <button class="btn-ghost relative" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"><i class="fas fa-moon text-lg" id="themeIcon"></i></button>
 <button class="btn-ghost relative" id="notifBellBtn" onclick="toggleNotifDropdown()" aria-label="Notifications"><i class="fas fa-bell text-lg"></i><span class="notif-badge" id="notifBadge" style="display:none"></span></button>
+<button class="btn-ghost" id="adminBtn" onclick="navigate('admin')" aria-label="Admin panel" title="Admin panel" style="display:none"><i class="fas fa-shield-halved text-lg"></i></button>
 <div class="notif-dropdown" id="notifDropdown"><div class="p-3 border-b" style="border-color:var(--border)"><div class="flex items-center justify-between"><h4 class="font-display font-bold text-sm">Notifications</h4><button class="text-xs font-semibold cursor-pointer hover:underline" style="color:var(--accent);background:none;border:none" onclick="markAllNotifsRead()">Mark all read</button></div></div><div class="notif-list" id="notifList"><p class="text-sm text-center py-6" style="color:var(--text2)">No notifications yet</p></div></div>
 <button class="btn-ghost hidden sm:flex" onclick="showAuth('login')" id="headerAuthBtn"><i class="fas fa-user-circle text-lg"></i><span class="text-sm">Sign In</span></button>
 </div></header><main class="flex-1 overflow-y-auto p-5 md:p-8" id="mainContent" role="main"><div class="loader" id="appLoader"></div></main></div></div>

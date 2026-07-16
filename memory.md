@@ -4,6 +4,28 @@ Running log of context, decisions, and things worth remembering between sessions
 
 ---
 
+## 2026-07-15 — Admin broadcast system, revised to single-site (no separate admin app)
+
+Superseded the earlier plan below: instead of a second Vercel project, the admin panel now lives **inside the main AnimaLearn app** at a hidden `#admin` route.
+
+- **`js/config.js`:** added `ADMIN_UID` constant (placeholder, needs the real UID pasted in — see setup below).
+- **`index.html`:** added a shield icon button (`#adminBtn`) in the header, `display:none` by default.
+- **`js/utils.js`:** `updateUserUI()` now shows `#adminBtn` only when `state.uid === ADMIN_UID`.
+- **`js/router.js`:** new `"admin"` route.
+- **`js/pages.js`:** `renderAdminPage()` (shows a "Restricted" message for anyone whose UID doesn't match; otherwise the broadcast form + list), `initAdminPage()`, `renderAdminBroadcastList()`, `sendAdminBroadcast()`, `deleteAdminBroadcast()`.
+- **`js/db.js`:** `sendBroadcastDb()`, `deleteBroadcastDb()`, `listenAdminBroadcastList()` — all short-circuit unless `state.uid===ADMIN_UID`, mirroring the real enforcement that lives in the Firestore security rule.
+- The underlying broadcast delivery mechanism for regular users (real-time listener, merge into the notification bell, `lastSeenBroadcastAt` read-tracking) is unchanged from the entry below — only the admin-side sending UI moved from a separate site into this app.
+- Setup doc moved/renamed to `firestore-rules-addition.md` at the project root (was previously inside the now-deleted `AnimaLearn-Admin/` folder). Same required manual steps as before: create one dedicated Firebase Auth account, get its UID, paste into `js/config.js` and the Firestore rule, publish the rule. Nobody but that one account will ever see the shield icon or be able to write to `broadcasts`.
+- The admin now logs in through the **same sign-in modal every user sees** — no separate login page, no separate deployment to keep in sync.
+
+## 2026-07-15 — Admin broadcast system built (original separate-site plan, superseded above)
+
+- Added a lightweight admin-only notification broadcast system, scoped to just notifications (no content/topic editing, no user management — deliberately kept small).
+- **Main app (`js/db.js`, `js/auth.js`, `js/app.js`, `js/utils.js`, `js/config.js`):** added a `broadcasts` top-level Firestore collection, a real-time listener (`listenForBroadcasts`) started unconditionally in `init()`, and merge logic (`mergeBroadcastsIntoNotifications`) that folds broadcast docs into the existing `state.notifications` array so the existing bell/dropdown/badge UI needed zero redesign. Read-tracking uses a single `lastSeenBroadcastAt` timestamp (on the user doc if signed in, `localStorage` if guest) instead of per-user fan-out writes — avoids needing Cloud Functions.
+- **New sibling project `AnimaLearn-Admin/`:** separate static site (same no-build vanilla JS pattern), reuses the main app's design tokens. Single dedicated Firebase Auth account is the "admin login" (not a hardcoded password check in JS — that would be bypassable via view-source). Real enforcement is a Firestore security rule restricting writes to `broadcasts` to that one UID. Setup steps and the rule to paste are in `AnimaLearn-Admin/firestore-rules-addition.md`.
+- **Still needed before this works live:** create the admin Firebase Auth account in the console, get its UID, paste into `AnimaLearn-Admin/config.js` (`ADMIN_UID`) and into the Firestore rule, publish the rule, deploy `AnimaLearn-Admin` as its own Vercel project. None of this was done by Claude — it can't create Firebase Auth users or touch the Vercel/Firebase consoles.
+- Hit and fixed a self-inflicted bug while editing `js/db.js`: a `str_replace` edit inserted literal `\r` text (backslash + r) instead of actual carriage returns, which broke JS syntax. Caught it by running `new Function(source)` as a syntax check on every edited file before calling it done — worth doing that check after any edit to these minified single-line-per-function files going forward, since a visual diff is easy to misread.
+
 ## 2026-07-15 — Docs bootstrap + duplicate-file discovery
 
 - Generated `architecture.md`, `phases.md`, `rules.md`, `design.md` (this file's siblings) from a fresh export of the project (`AnimaLearn.zip`).
