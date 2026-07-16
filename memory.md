@@ -4,6 +4,10 @@ Running log of context, decisions, and things worth remembering between sessions
 
 ---
 
+## 2026-07-16 — Fixed "NaNd ago" bug in notifications
+
+`timeAgo()` in `js/utils.js` did `new Date(d).getTime()` directly on notification timestamps, but those are Firestore `Timestamp` objects, not plain dates/numbers — `new Date(timestampObject)` silently produces `Invalid Date`, so every calculation downstream became `NaN`, always hitting the final `"...+'d ago'"` branch → literally `"NaNd ago"`. Pre-existing bug, not caused by the broadcast feature, just surfaced because broadcasts made the notification dropdown get looked at again. Fixed by checking for `.toMillis()` (Firestore Timestamp), `instanceof Date`, or falling back to `new Date(d)`, with a `NaN` guard returning `"just now"` instead of garbage. Affects both personal notifications and the new broadcast items — same fix covers both.
+
 ## 2026-07-15 — Admin broadcast system, revised to single-site (no separate admin app)
 
 Superseded the earlier plan below: instead of a second Vercel project, the admin panel now lives **inside the main AnimaLearn app** at a hidden `#admin` route.
