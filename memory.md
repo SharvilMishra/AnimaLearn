@@ -4,6 +4,12 @@ Running log of context, decisions, and things worth remembering between sessions
 
 ---
 
+## 2026-07-16 — Added Profile page
+
+New nav item, placed above Dashboard as requested. `#profile` route shows: avatar, name, email (read-only), member-since date, live stats (topics/completed/notes/animations — same calc as the dashboard cards), an "Admin" badge when `state.uid===ADMIN_UID`, an editable form for display name + difficulty level (writes to the existing `users/{uid}` doc via new `updateUserProfileDb()` in `db.js`), and a sign-out button. Guarded with a sign-in prompt if visited while logged out.
+- `js/auth.js` now also pulls `createdAt` into `state.user` on login (previously only `difficulty` was fetched) so the profile page has a join date to show.
+- Deliberately did not add email or password editing — email change and password change both require Firebase re-auth flows that are easy to get wrong (silent failures on `auth/requires-recent-login`); flagged as a future addition if actually wanted, not built speculatively.
+
 ## 2026-07-16 — Fixed "NaNd ago" bug in notifications
 
 `timeAgo()` in `js/utils.js` did `new Date(d).getTime()` directly on notification timestamps, but those are Firestore `Timestamp` objects, not plain dates/numbers — `new Date(timestampObject)` silently produces `Invalid Date`, so every calculation downstream became `NaN`, always hitting the final `"...+'d ago'"` branch → literally `"NaNd ago"`. Pre-existing bug, not caused by the broadcast feature, just surfaced because broadcasts made the notification dropdown get looked at again. Fixed by checking for `.toMillis()` (Firestore Timestamp), `instanceof Date`, or falling back to `new Date(d)`, with a `NaN` guard returning `"just now"` instead of garbage. Affects both personal notifications and the new broadcast items — same fix covers both.
